@@ -1,11 +1,13 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 const morgan = require('morgan');
 const exphbs = require('express-handlebars');
 const connectDB = require('./config/db');
 const passport = require('passport');
 const path = require('path');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session)
 
 // load config
 dotenv.config({path: './config/config.env'});
@@ -31,6 +33,7 @@ app.use(session({
     secret: "avenderaldora",
     resave: false,
     saveUninitialized: false,
+    store: new MongoStore({mongooseConnection: mongoose.connection})
     // cookie: {secure: true}
 }))
 
@@ -45,6 +48,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routes
 app.use('/', require('./routes/index'))
 app.use('/auth', require('./routes/auth'))
+app.use('/stories', require('./routes/stories'))
 
 const PORT = process.env.PORT || 3000
 

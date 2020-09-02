@@ -19,8 +19,10 @@ router.get('/google/callback',
 //@desc    Logout user
 //@route    GET /auth/logout
 router.get('/logout',(req,res)=>{
-    req.logout()
-    res.redirect('/')
+    req.session.destroy((e) => {
+        req.logout()
+        res.redirect('/')
+    })
 })
 
 
